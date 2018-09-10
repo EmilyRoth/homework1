@@ -1,7 +1,5 @@
 package q5;
 
-import org.testng.internal.thread.FutureResultAdapter;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.*;
