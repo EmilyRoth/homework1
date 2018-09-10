@@ -4,30 +4,24 @@ import java.util.ArrayList;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class PIncrement implements Runnable{
+    // threads aren't touching the same count variable
+    // threads not releasing lock
 
-    ReentrantLock reentrantLock;
+    private static ReentrantLock reentrantLock = new ReentrantLock();
     int numInc;
-    Integer count;
+    private static volatile Integer count;
 
-    private PIncrement(int count, int c, ReentrantLock rl) {
-        this.reentrantLock = rl;
+    private PIncrement(int count, int c) {
         this.numInc = c;
         this.count = count;
     }
 
     public static int parallelIncrement(int c, int numThreads){
-        // your implementation goes here.
-
-        ReentrantLock rl = new ReentrantLock();
-
-        //covert to AtomicInt
-        Integer count = c;
-
         //populate list of numThreads
         ArrayList<Thread> threads = new ArrayList<Thread>();
 
         for (int i = 0; i < numThreads; i++) {
-            threads.add(new Thread(new PIncrement(count, 1200000/numThreads, rl)));
+            threads.add(new Thread(new PIncrement(c, 1200000/numThreads)));
         }
 
         //run
@@ -48,13 +42,16 @@ public class PIncrement implements Runnable{
 
     @Override
     public void run() {
-        int c = 0;
-        while (c < numInc) {
-            if (reentrantLock.tryLock()) {
-                reentrantLock.lock();
-                c++;
-                count = count + 1;
-                reentrantLock.unlock();
+        int loopCounter = 0;
+        while (loopCounter < numInc) {
+            boolean ans = reentrantLock.tryLock();
+            if (ans) {
+                loopCounter++;
+                try{
+                    count = count + 1;
+                }finally{
+                    reentrantLock.unlock();
+                }
             }
         }
     }
