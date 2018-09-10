@@ -18,11 +18,16 @@ public class PIncrement implements Runnable{
         //covert to AtomicInt
         AtomicInteger count = new AtomicInteger(c);
 
+        int total = 1200000;
+        int inc = total/numThreads;
+        int extra =  total%numThreads;
+
         //populate list of numThreads
         ArrayList<Thread> threads = new ArrayList<Thread>();
-        for (int i = 0; i < numThreads; i++) {
-            threads.add(new Thread(new PIncrement(count, 1200000/numThreads)));
+        for(int i = 0; i < numThreads - 1; i++){
+            threads.add(new Thread(new PIncrement(count, inc)));
         }
+        threads.add(new Thread(new PIncrement(count, inc + extra)));
 
         //run
         for (Thread t : threads) {

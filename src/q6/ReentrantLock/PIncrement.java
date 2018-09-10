@@ -20,9 +20,14 @@ public class PIncrement implements Runnable{
         //populate list of numThreads
         ArrayList<Thread> threads = new ArrayList<Thread>();
 
-        for (int i = 0; i < numThreads; i++) {
-            threads.add(new Thread(new PIncrement(c, 1200000/numThreads)));
+        int total = 1200000;
+        int inc = total/numThreads;
+        int extra =  total%numThreads;
+
+        for(int i = 0; i < numThreads - 1; i++){
+            threads.add(new Thread(new PIncrement(count, inc)));
         }
+        threads.add(new Thread(new PIncrement(count, inc + extra)));
 
         //run
         for (Thread t : threads) {

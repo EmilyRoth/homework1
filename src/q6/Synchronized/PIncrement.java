@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class PIncrement implements Runnable{
 
-    Integer count;
+    volatile static Integer count;
     int numInc;
 
     private PIncrement(Integer count, int numInc){
@@ -16,10 +16,15 @@ public class PIncrement implements Runnable{
         // your implementation goes here.
         Integer count = c;
 
+        int total = 1200000;
+        int inc = total/numThreads;
+        int extra =  total%numThreads;
+
         ArrayList<Thread> threads = new ArrayList<Thread>();
-        for(int i = 0; i < numThreads; i++){
-            threads.add(new Thread(new PIncrement(count, 1200000/numThreads)));
+        for(int i = 0; i < numThreads - 1; i++){
+            threads.add(new Thread(new PIncrement(count, inc)));
         }
+        threads.add(new Thread(new PIncrement(count, inc + extra)));
 
         //run
         for(Thread t : threads){
@@ -34,20 +39,17 @@ public class PIncrement implements Runnable{
             }
         }
 
-        // TODO why are we getting 0?
-        return count.intValue();
+        return PIncrement.count;
     }
 
     @Override
     public void run() {
         for(int i = 0; i < numInc; i++){
-            synchronized (count){
-                count = count + 1;
-            }
+            yay();
         }
     }
 
-    public static void main(String[] args) {
-        System.out.print(parallelIncrement(0, 8));
+    public synchronized static void yay() {
+        count += 1;
     }
 }
