@@ -14,6 +14,7 @@ public class PIncrement implements Runnable{
 
     public static int parallelIncrement(int c, int numThreads){
         // your implementation goes here.
+        var time = System.currentTimeMillis();
         Integer count = c;
 
         int total = 1200000;
@@ -38,6 +39,9 @@ public class PIncrement implements Runnable{
                 return -1;
             }
         }
+
+        var timelapsed = System.currentTimeMillis() - time;
+        System.out.println("Time for Synchronized: " + timelapsed);
 
         return PIncrement.count;
     }
