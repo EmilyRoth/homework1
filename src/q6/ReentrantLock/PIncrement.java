@@ -18,7 +18,7 @@ public class PIncrement implements Runnable{
 
     public static int parallelIncrement(int c, int numThreads){
         //populate list of numThreads
-        var time = System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         ArrayList<Thread> threads = new ArrayList<Thread>();
 
         int total = 1200000;
@@ -43,7 +43,7 @@ public class PIncrement implements Runnable{
             }
         }
 
-        var timelapsed = System.currentTimeMillis() - time;
+        long timelapsed = System.currentTimeMillis() - time;
         System.out.println("Time for ReentrantLock: " + timelapsed);
         return count;
     }

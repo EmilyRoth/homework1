@@ -16,7 +16,7 @@ public class PIncrement implements Runnable{
     public static int parallelIncrement(int c, int numThreads){
         // your implementation goes here.
         //covert to AtomicInt
-        var time = System.currentTimeMillis();
+        long time = System.currentTimeMillis();
         AtomicInteger count = new AtomicInteger(c);
 
         int total = 1200000;
@@ -43,7 +43,7 @@ public class PIncrement implements Runnable{
             }
         }
 
-        var timelapsed = System.currentTimeMillis() - time;
+        long timelapsed = System.currentTimeMillis() - time;
         System.out.println("Time for AtomicInteger: " + timelapsed);
         return count.intValue();
     }
