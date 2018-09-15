@@ -26,9 +26,9 @@ public class PIncrement implements Runnable{
         int extra =  total%numThreads;
 
         for(int i = 0; i < numThreads - 1; i++){
-            threads.add(new Thread(new PIncrement(count, inc)));
+            threads.add(new Thread(new PIncrement(c, inc)));
         }
-        threads.add(new Thread(new PIncrement(count, inc + extra)));
+        threads.add(new Thread(new PIncrement(c, inc + extra)));
 
         //run
         for (Thread t : threads) {
